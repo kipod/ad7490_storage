@@ -1,0 +1,25 @@
+version: "3"
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  reader:
+    build:
+      context: .
+    restart: always
+    container_name: reader-container
+    command: ["python", "-u", "reader.py"]
+    depends_on:
+      - redis
+
+  writer:
+    build:
+      context: .
+    restart: always
+    container_name: writer-container
+    command: ["python", "-u", "writer.py"]
+    depends_on:
+      - redis
