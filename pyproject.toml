@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "redistest"
+name = "storage"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Simple2B <simple2b.info@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

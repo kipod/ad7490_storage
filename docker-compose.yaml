@@ -2,6 +2,7 @@ version: "3"
 services:
   redis:
     image: redis:latest
+    restart: always
     container_name: redis-container
     ports:
       - "127.0.0.1:6379:6379"
@@ -9,17 +10,17 @@ services:
   reader:
     build:
       context: .
-    restart: always
+    restart: unless-stopped
     container_name: reader-container
-    command: ["python", "-u", "reader.py"]
+    command: [ "python", "-u", "reader.py" ]
     depends_on:
       - redis
 
   writer:
     build:
       context: .
-    restart: always
+    restart: no
     container_name: writer-container
-    command: ["python", "-u", "writer.py"]
+    command: [ "python", "-u", "writer.py" ]
     depends_on:
       - redis
