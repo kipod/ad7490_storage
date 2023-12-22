@@ -10,6 +10,7 @@ from config import Settings, get_settings
 
 SETTINGS: Settings = get_settings()
 
+t = 0
 
 def timestamp() -> int:
     """returns timestamp in microseconds
@@ -17,7 +18,10 @@ def timestamp() -> int:
     Returns:
         int: timestamp in microseconds
     """
-    return int(time.time() * 1e6)
+    # return int(time.time() * 1e6)
+    global t
+    t += 1
+    return t
 
 
 class Status(enum.Enum):
