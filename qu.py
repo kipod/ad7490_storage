@@ -82,7 +82,6 @@ class Queue:
             port=SETTINGS.REDIS_PORT,
             db=SETTINGS.REDIS_DB,
         )
-        self.current_size: int = self._llen(SETTINGS.QUEUE_NAME)
 
     @property
     def size(self) -> int:
@@ -107,39 +106,25 @@ class Queue:
             return []
 
     def push(self, data: QData):
-        if self.current_size >= SETTINGS.MAX_QUEUE_SIZE:
+        if self.size >= SETTINGS.MAX_QUEUE_SIZE:
             self.r.rpop(SETTINGS.QUEUE_NAME)
-            self.current_size -= 1
 
         self.r.lpush(SETTINGS.QUEUE_NAME, data.pack())
-        self.current_size += 1
 
     def pop(self, count: int = 1) -> list[QData]:
-        count = min(count, self.current_size)
+        count = min(count, self.size)
         data = self._rpop(SETTINGS.QUEUE_NAME, count)
 
-        self.current_size -= count
         return [QData.unpack(d) for d in data]
-
-    def pop_gen(self, num_data: int = 1) -> Generator[QData, None, None]:
-        if num_data == -1:
-            num_data = self.current_size
-
-        num_data = min(num_data, self.current_size)
-
-        for data in self._rpop(SETTINGS.QUEUE_NAME, num_data):
-            self.current_size -= 1
-            yield QData.unpack(data)
 
     def range(self, start: int = 0, end: int = -1) -> list[QData]:
         if end == -1:
-            end = self.current_size - 1
+            end = self.size - 1
 
         return [QData.unpack(d) for d in self._lrange(SETTINGS.QUEUE_NAME, start, end)]
 
     def clear(self):
         self.r.delete(SETTINGS.QUEUE_NAME)
-        self.current_size = 0
 
     def start(self):
         self.status = Status.WRITE
@@ -164,7 +149,7 @@ class Queue:
         self.r.set(SETTINGS.STATUS_NAME, value.value)
 
     def __len__(self) -> int:
-        return self.current_size
+        return self.size
 
     def __repr__(self) -> str:
-        return f"Queue({self.current_size})"
+        return f"Queue({self.size})"
