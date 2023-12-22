@@ -1,16 +1,19 @@
-import time
-
-import redis
-
 from qu import Queue
 
 
-r = redis.Redis(host="redis", port=6379, db=0)
+q = Queue()
 
 
-queue = Queue(r)
+def main():
+    while q.is_writing:
+        print(q.pop())
 
-while True:
-    time.sleep(0.0001)
-    print(queue.range(0, 0))
-    # print(queue.pop())
+
+def sample():
+    while q.is_writing:
+        for qdata in q.pop_gen():
+            print(qdata)
+
+
+if __name__ == "__main__":
+    main()

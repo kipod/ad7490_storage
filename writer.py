@@ -1,26 +1,32 @@
 import random
-import time
 
-import redis
+from qu import Queue, QData
 
-from qu import Queue, MAX_QUEUE_SIZE
-
-r = redis.Redis(host="redis", port=6379, db=0)
-queue = Queue(r)
+queue = Queue()
 
 
 def main():
-    while True:
-        time.sleep(0.01)
-        fake_data = [
-            f"{random.randint(0, 100)};{random.randint(0, 100)}"
-            for _ in range(MAX_QUEUE_SIZE * 2)
-        ]
-
-        for vector in fake_data:
-            number1, number2 = map(int, vector.split(";"))
-            queue.push(number1)
-            queue.push(number2)
+    while queue.is_writing:
+        qdata = QData(
+            value1=random.randint(0, 65535),
+            value2=random.randint(0, 65535),
+            value3=random.randint(0, 65535),
+            value4=random.randint(0, 65535),
+            value5=random.randint(0, 65535),
+            value6=random.randint(0, 65535),
+            value7=random.randint(0, 65535),
+            value8=random.randint(0, 65535),
+            value9=random.randint(0, 65535),
+            value10=random.randint(0, 65535),
+            value11=random.randint(0, 65535),
+            value12=random.randint(0, 65535),
+            value13=random.randint(0, 65535),
+            value14=random.randint(0, 65535),
+            value15=random.randint(0, 65535),
+            value16=random.randint(0, 65535),
+        )
+        print(qdata)
+        queue.push(qdata)
 
 
 if __name__ == "__main__":

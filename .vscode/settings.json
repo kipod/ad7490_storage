@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["pydantic"]
+  "cSpell.words": [
+    "llen",
+    "lpush",
+    "pydantic",
+    "qdata"
+  ],
+  "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
 }

@@ -12,7 +12,9 @@ services:
       context: .
     restart: unless-stopped
     container_name: reader-container
-    command: [ "python", "-u", "reader.py" ]
+    command: ["python", "-u", "reader.py"]
+    environment:
+      - REDIS_HOST=redis
     depends_on:
       - redis
 
@@ -21,6 +23,8 @@ services:
       context: .
     restart: no
     container_name: writer-container
-    command: [ "python", "-u", "writer.py" ]
+    command: ["python", "-u", "writer.py"]
+    environment:
+      - REDIS_HOST=redis
     depends_on:
       - redis
