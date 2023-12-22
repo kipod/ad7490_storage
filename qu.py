@@ -1,3 +1,4 @@
+import enum
 import struct
 import time
 from typing import Generator, Self
@@ -19,9 +20,9 @@ def timestamp() -> int:
     return int(time.time() * 1e6)
 
 
-class StatusEnum(str):
-    write = b"write"
-    wait = b"wait"
+class Status(enum.Enum):
+    WRITE = b"write"
+    WAIT = b"wait"
 
 
 class QData(BaseModel):
@@ -82,7 +83,6 @@ class Queue:
             db=SETTINGS.REDIS_DB,
         )
         self.current_size: int = self._llen(SETTINGS.QUEUE_NAME)
-        self.r.set(SETTINGS.STATUS_NAME, StatusEnum.write)
 
     @property
     def size(self) -> int:
@@ -141,23 +141,27 @@ class Queue:
         self.r.delete(SETTINGS.QUEUE_NAME)
         self.current_size = 0
 
-    def start_writing(self):
-        self.status = StatusEnum.write
+    def start(self):
+        self.status = Status.WRITE
 
-    def stop_writing(self):
-        self.status = StatusEnum.wait
+    def stop(self):
+        self.status = Status.WAIT
 
     @property
-    def status(self):
-        return self.r.get(SETTINGS.STATUS_NAME)
+    def is_active(self) -> bool:
+        return self.status == Status.WRITE
+
+    @property
+    def status(self) -> Status:
+        status_value = self.r.get(SETTINGS.STATUS_NAME)
+        if status_value is None:
+            self.r.set(SETTINGS.STATUS_NAME, Status.WRITE.value)
+            return Status.WRITE
+        return Status(status_value)
 
     @status.setter
-    def status(self, value: StatusEnum):
-        self.r.set(SETTINGS.STATUS_NAME, value)
-
-    @property
-    def is_writing(self):
-        return self.status == StatusEnum.write
+    def status(self, value: Status):
+        self.r.set(SETTINGS.STATUS_NAME, value.value)
 
     def __len__(self) -> int:
         return self.current_size
