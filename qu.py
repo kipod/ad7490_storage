@@ -81,18 +81,34 @@ class Queue:
             port=SETTINGS.REDIS_PORT,
             db=SETTINGS.REDIS_DB,
         )
-        self.current_size = self.r.llen(SETTINGS.QUEUE_NAME)
+        self.current_size: int = self._llen(SETTINGS.QUEUE_NAME)
         self.r.set(SETTINGS.STATUS_NAME, StatusEnum.write)
 
     @property
-    def size(self):
-        return self.r.llen(SETTINGS.QUEUE_NAME)
+    def size(self) -> int:
+        return self._llen(SETTINGS.QUEUE_NAME)
+
+    def _llen(self, name: str) -> int:
+        try:
+            return self.r.llen(name)  # type: ignore
+        except redis.exceptions.ResponseError:
+            return 0
+
+    def _rpop(self, name: str, count: int=1) -> list[bytes]:
+        try:
+            return self.r.rpop(name, count)  # type: ignore
+        except redis.exceptions.ResponseError:
+            return []
+
+    def _lrange(self, name: str, start: int, end: int) -> list[bytes]:
+        try:
+            return self.r.lrange(name, start, end)  # type: ignore
+        except redis.exceptions.ResponseError:
+            return []
 
     def push(self, data: QData):
         if self.current_size >= SETTINGS.MAX_QUEUE_SIZE:
-            # self.pop(1)
-            # using more efficient python without calling functions
-            self.r.rpop(SETTINGS.QUEUE_NAME)  # pop 1000 elements
+            self.r.rpop(SETTINGS.QUEUE_NAME)
             self.current_size -= 1
 
         self.r.lpush(SETTINGS.QUEUE_NAME, data.pack())
@@ -100,7 +116,7 @@ class Queue:
 
     def pop(self, count: int = 1) -> list[QData]:
         count = min(count, self.current_size)
-        data = self.r.rpop(SETTINGS.QUEUE_NAME, count)
+        data = self._rpop(SETTINGS.QUEUE_NAME, count)
 
         self.current_size -= count
         return [QData.unpack(d) for d in data]
@@ -111,17 +127,15 @@ class Queue:
 
         num_data = min(num_data, self.current_size)
 
-        for _ in range(num_data):
-            data = self.r.rpop(SETTINGS.QUEUE_NAME)
-
+        for data in self._rpop(SETTINGS.QUEUE_NAME, num_data):
             self.current_size -= 1
             yield QData.unpack(data)
 
-    def range(self, start: int = 0, end: int = -1) -> list[int]:
+    def range(self, start: int = 0, end: int = -1) -> list[QData]:
         if end == -1:
             end = self.current_size - 1
 
-        return self.r.lrange(SETTINGS.QUEUE_NAME, start, end)
+        return [QData.unpack(d) for d in self._lrange(SETTINGS.QUEUE_NAME, start, end)]
 
     def clear(self):
         self.r.delete(SETTINGS.QUEUE_NAME)

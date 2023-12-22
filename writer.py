@@ -8,22 +8,22 @@ queue = Queue()
 def main():
     while queue.is_writing:
         qdata = QData(
-            value1=random.randint(0, 65535),
-            value2=random.randint(0, 65535),
-            value3=random.randint(0, 65535),
-            value4=random.randint(0, 65535),
-            value5=random.randint(0, 65535),
-            value6=random.randint(0, 65535),
-            value7=random.randint(0, 65535),
-            value8=random.randint(0, 65535),
-            value9=random.randint(0, 65535),
-            value10=random.randint(0, 65535),
-            value11=random.randint(0, 65535),
-            value12=random.randint(0, 65535),
-            value13=random.randint(0, 65535),
-            value14=random.randint(0, 65535),
-            value15=random.randint(0, 65535),
-            value16=random.randint(0, 65535),
+            value1=random.randint(0, 4095),
+            value2=random.randint(0, 4095),
+            value3=random.randint(0, 4095),
+            value4=random.randint(0, 4095),
+            value5=random.randint(0, 4095),
+            value6=random.randint(0, 4095),
+            value7=random.randint(0, 4095),
+            value8=random.randint(0, 4095),
+            value9=random.randint(0, 4095),
+            value10=random.randint(0, 4095),
+            value11=random.randint(0, 4095),
+            value12=random.randint(0, 4095),
+            value13=random.randint(0, 4095),
+            value14=random.randint(0, 4095),
+            value15=random.randint(0, 4095),
+            value16=random.randint(0, 4095),
         )
         print(qdata)
         queue.push(qdata)
