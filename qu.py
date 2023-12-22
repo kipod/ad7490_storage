@@ -26,7 +26,7 @@ class Status(enum.Enum):
 
 
 class QData(BaseModel):
-    timestamp: int = Field(default_factory=timestamp)
+    ts: int = Field(default_factory=timestamp)
     value1: int = 0
     value2: int = 1
     value3: int = 2
@@ -47,7 +47,7 @@ class QData(BaseModel):
     def pack(self) -> bytes:
         return struct.pack(
             "Q16H",
-            self.timestamp,
+            self.ts,
             self.value1,
             self.value2,
             self.value3,
@@ -70,7 +70,7 @@ class QData(BaseModel):
     def unpack(cls, data: bytes) -> Self:
         timestamp, *values = struct.unpack("Q16H", data)
         return cls(
-            timestamp=timestamp,
+            ts=timestamp,
             **{f"value{n[0]+1}": n[1] for n in enumerate(values)},
         )
 
