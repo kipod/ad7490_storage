@@ -9,12 +9,7 @@ queue = Queue()
 
 def main():
     run = False
-    while True:
-        if queue.is_active:
-            if not run:
-                log(log.INFO, "GO!!!")
-            run = True
-            qdata = QData(
+    qdata = QData(
                 value1=random.randint(0, 4095),
                 value2=random.randint(0, 4095),
                 value3=random.randint(0, 4095),
@@ -32,6 +27,12 @@ def main():
                 value15=random.randint(0, 4095),
                 value16=random.randint(0, 4095),
             )
+    while True:
+        if queue.is_active:
+            if not run:
+                log(log.INFO, "GO!!!")
+            run = True
+
             queue.push(qdata)
         else:
             if run:
