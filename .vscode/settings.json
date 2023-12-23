@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["llen", "lpush", "lrange", "pydantic", "qdata"],
+  "cSpell.words": ["llen", "lpush", "lrange", "pydantic", "qdata", "rpush"],
   "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
   "taipyStudio.config.mainPythonFile": "reader.py",
   "taipyStudio.gUI.elementsFilePaths": []

@@ -1,7 +1,7 @@
 import enum
 import struct
 import time
-from typing import Generator, Self
+from typing import Self
 
 import redis
 from pydantic import BaseModel, Field
@@ -82,6 +82,7 @@ class Queue:
             port=SETTINGS.REDIS_PORT,
             db=SETTINGS.REDIS_DB,
         )
+        self.pipe = self.r.pipeline()
 
     @property
     def size(self) -> int:
@@ -105,11 +106,14 @@ class Queue:
         except redis.exceptions.ResponseError:
             return []
 
-    def push(self, data: QData):
-        if self.size >= SETTINGS.MAX_QUEUE_SIZE:
-            self.r.rpop(SETTINGS.QUEUE_NAME)
+    def push(self, data: QData, execute: bool = False):
+        # if self.size >= SETTINGS.MAX_QUEUE_SIZE:
+        #     self.r.rpop(SETTINGS.QUEUE_NAME)
 
         self.r.lpush(SETTINGS.QUEUE_NAME, data.pack())
+        # self.pipe.lpush(SETTINGS.QUEUE_NAME, data.pack())
+        # if execute:
+        #     self.pipe.execute()
 
     def pop(self, count: int = 1) -> list[QData]:
         count = min(count, self.size)
@@ -153,3 +157,14 @@ class Queue:
 
     def __repr__(self) -> str:
         return f"Queue({self.size})"
+
+    @property
+    def speed(self) -> int:
+        # begin = self.size
+        # time.sleep(1)
+        # return  self.size - begin
+        range = self.range()
+        if not range:
+            return 0
+        seconds = (range[0].ts - range[-1].ts) / 1e6
+        return int(len(range) / seconds)

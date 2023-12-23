@@ -4,6 +4,8 @@ services:
     image: redis:latest
     restart: always
     container_name: redis-container
+    limits:
+      memory: 50M
     ports:
       - "127.0.0.1:6379:6379"
 
