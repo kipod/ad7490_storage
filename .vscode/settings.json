@@ -1,5 +1,13 @@
 {
-  "cSpell.words": ["llen", "lpush", "lrange", "pydantic", "qdata", "rpush"],
+  "cSpell.words": [
+    "llen",
+    "lpush",
+    "lrange",
+    "maxmemory",
+    "pydantic",
+    "qdata",
+    "rpush"
+  ],
   "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
   "taipyStudio.config.mainPythonFile": "reader.py",
   "taipyStudio.gUI.elementsFilePaths": []

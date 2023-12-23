@@ -83,6 +83,8 @@ class Queue:
             db=SETTINGS.REDIS_DB,
         )
         self.pipe = self.r.pipeline()
+        self.pipe_size = 0
+        self.r.config_set("maxmemory", "200MB")
 
     @property
     def size(self) -> int:
@@ -106,14 +108,15 @@ class Queue:
         except redis.exceptions.ResponseError:
             return []
 
-    def push(self, data: QData, execute: bool = False):
-        # if self.size >= SETTINGS.MAX_QUEUE_SIZE:
-        #     self.r.rpop(SETTINGS.QUEUE_NAME)
-
-        self.r.lpush(SETTINGS.QUEUE_NAME, data.pack())
-        # self.pipe.lpush(SETTINGS.QUEUE_NAME, data.pack())
-        # if execute:
-        #     self.pipe.execute()
+    def push(self, data: QData):
+        self.pipe.lpush(SETTINGS.QUEUE_NAME, data.pack())
+        self.pipe_size+=1
+        if self.pipe_size >= SETTINGS.PIPE_SIZE:
+            self.pipe.execute()
+            self.pipe_size = 0
+            over = self.size - SETTINGS.MAX_QUEUE_SIZE
+            if over > 0:
+                self.r.rpop(SETTINGS.QUEUE_NAME, over)
 
     def pop(self, count: int = 1) -> list[QData]:
         count = min(count, self.size)
@@ -163,7 +166,7 @@ class Queue:
         # begin = self.size
         # time.sleep(1)
         # return  self.size - begin
-        range = self.range()
+        range = self.range(0, 10000)
         if not range:
             return 0
         seconds = (range[0].ts - range[-1].ts) / 1e6

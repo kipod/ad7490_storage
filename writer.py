@@ -13,7 +13,7 @@ def main():
     while True:
         if queue.is_active:
             qdata = QData(
-                value1=random.randint(0, 4095),
+                value1=(counter & 0xFFFF),
                 value2=random.randint(0, 4095),
                 value3=random.randint(0, 4095),
                 value4=random.randint(0, 4095),
@@ -34,8 +34,8 @@ def main():
                 log(log.INFO, "GO!!!")
             run = True
 
-            execute = counter % 10000 == 0
-            queue.push(qdata, execute)
+            queue.push(qdata)
+            counter += 1
         else:
             if run:
                 log(log.INFO, "Stop!!! Wait for queue to be active.")

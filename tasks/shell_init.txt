@@ -2,7 +2,7 @@
 %autoreload 2
 
 import time
-from qu import QData, Queue
+from qu import QData, Queue, timestamp as ts
 from config import get_settings
 
 CFG = get_settings()
