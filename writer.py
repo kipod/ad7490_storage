@@ -18,7 +18,7 @@ def main():
             if not run:
                 log(log.INFO, "GO!!!")
             run = True
-            for _ in range(SETTINGS.MAX_QUEUE_SIZE):
+            for _ in range(SETTINGS.WRITE_BATCH_SIZE):
                 qdata = QData(
                     value1=(counter & 0xFFFF),
                     value2=random.randint(0, 4095),
@@ -39,8 +39,6 @@ def main():
                 )
                 queue.push(qdata)
                 counter += 1
-                if counter % SETTINGS.WRITE_BATCH_SIZE == 0:
-                    break
         else:
             if run:
                 log(log.INFO, "Stop!!! Wait for queue to be active.")
