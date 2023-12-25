@@ -10,5 +10,6 @@
   ],
   "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
   "taipyStudio.config.mainPythonFile": "reader.py",
-  "taipyStudio.gUI.elementsFilePaths": []
+  "taipyStudio.gUI.elementsFilePaths": [],
+  "cmake.sourceDirectory": "/home/kipod/a/storage/c-writer"
 }
