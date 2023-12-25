@@ -15,6 +15,7 @@ set(SOURCES
     qu.cpp
     qu.hpp
     main.cpp
+    config.cpp
     )
 
 add_executable(writer ${SOURCES})
