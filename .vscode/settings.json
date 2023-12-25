@@ -6,7 +6,8 @@
     "maxmemory",
     "pydantic",
     "qdata",
-    "rpush"
+    "rpush",
+    "spidev"
   ],
   "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
   "taipyStudio.config.mainPythonFile": "reader.py",
