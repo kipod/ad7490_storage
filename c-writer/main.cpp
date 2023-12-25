@@ -1,26 +1,51 @@
 #include <iostream>
 #include <sw/redis++/redis++.h>
 #include "qu.hpp"
+#include "test_q.hpp"
+#include "config.hpp"
+
+const Config SETTINGS;
 
 using namespace sw::redis;
 
 int main(int, char **)
 {
-    uint64_t ts = getTimestamp();
-    // std::cout << "Hello, from writer!" << std::endl;
+    // test_queue();
+    std::cout << "start c-writer" << std::endl;
     Queue q;
-
-    QData data(
-        1, 2, 3, 4,
-        5, 6, 7, 8,
-        9, 10, 11, 12,
-        13, 14, 15, 16);
-
-    q.push(data, true);
-
-    auto data2 = q.pop();
-
-    assert(data == data2);
-
+    bool run = false;
+    size_t counter = 0;
+    try
+    {
+        for (;;)
+        {
+            if (q.isActive())
+            {
+                if (!run)
+                {
+                    std::cout << "GO!!" << std::endl;
+                    run = true;
+                }
+                for (int i = 0; i < SETTINGS.WRITE_BATCH_SIZE; i++)
+                {
+                    QData data(counter++);
+                    q.push(data);
+                }
+            }
+            else
+            {
+                if (run)
+                {
+                    std::cout << "Stop!!! Wait for queue to be active" << std::endl;
+                    run = false;
+                }
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+    q.stop();
     return 0;
 }

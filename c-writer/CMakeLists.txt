@@ -14,8 +14,13 @@ enable_testing()
 set(SOURCES
     qu.cpp
     qu.hpp
+    qdata.cpp
+    qdata.hpp
     main.cpp
     config.cpp
+    config.hpp
+    test_q.cpp
+    test_q.hpp
     )
 
 add_executable(writer ${SOURCES})

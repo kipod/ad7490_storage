@@ -1,7 +1,7 @@
 import random
 import time
 
-from qu import Queue, QData, timestamp
+from qu import Queue, QData
 from logger import log
 from config import Settings, get_settings
 
@@ -18,7 +18,6 @@ def main():
             if not run:
                 log(log.INFO, "GO!!!")
             run = True
-            # check_status_timestamp = timestamp()
             for _ in range(SETTINGS.MAX_QUEUE_SIZE):
                 qdata = QData(
                     value1=(counter & 0xFFFF),

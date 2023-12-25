@@ -167,3 +167,17 @@ class Queue:
             return 0
         seconds = (range[0].ts - range[-1].ts) / 1e6
         return int(len(range) / seconds)
+
+    @property
+    def time(self) -> float:
+        """ return time of queue in seconds"""
+        size = min(self.size, SETTINGS.MAX_QUEUE_SIZE)
+        if size == 0:
+            return 0
+        older_point = self.range(size, size)
+        while not older_point:
+            time.sleep(0.5)
+            older_point = self.range(size, size)
+        older = older_point[0].ts
+        newer = self.range(0, 0)[0].ts
+        return (newer-older) / 1e6

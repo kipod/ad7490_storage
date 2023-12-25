@@ -16,9 +16,9 @@ struct Config
     Config();
     std::string QUEUE_NAME;
     std::string STATUS_NAME;
-    int MAX_QUEUE_SIZE;
-    int WRITE_BATCH_SIZE;
-    int PIPE_SIZE;
+    size_t MAX_QUEUE_SIZE;
+    size_t WRITE_BATCH_SIZE;
+    size_t PIPE_SIZE;
 
     std::string REDIS_HOST;
     int REDIS_PORT;
