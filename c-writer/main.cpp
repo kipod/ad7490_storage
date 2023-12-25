@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sw/redis++/redis++.h>
+#include <thread>
 #include "qu.hpp"
 #include "test_q.hpp"
 #include "config.hpp"
@@ -39,6 +40,8 @@ int main(int, char **)
                     std::cout << "Stop!!! Wait for queue to be active" << std::endl;
                     run = false;
                 }
+                // sleep 1 sec
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         }
     }
