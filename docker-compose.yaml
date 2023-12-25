@@ -8,13 +8,12 @@ services:
     #   - 127.0.0.1:6379:6379
     network_mode: host
 
-
   reader:
     build:
       context: .
     restart: unless-stopped
     container_name: reader-container
-    command: ["python", "-u", "reader.py"]
+    command: [ "python", "-u", "reader.py" ]
     environment:
       - REDIS_HOST=redis
     depends_on:
@@ -25,7 +24,7 @@ services:
       context: .
     restart: no
     container_name: writer-container
-    command: ["python", "-u", "writer.py"]
+    command: [ "python", "-u", "writer.py" ]
     environment:
       - REDIS_HOST=redis
     depends_on:

@@ -20,11 +20,6 @@ def timestamp() -> int:
     return int(time.time() * 1e6)
 
 
-class Status(enum.Enum):
-    WRITE = b"write"
-    WAIT = b"wait"
-
-
 class QData(BaseModel):
     ts: int = Field(default_factory=timestamp)
     value1: int = 0
@@ -76,6 +71,10 @@ class QData(BaseModel):
 
 
 class Queue:
+    class Status(enum.IntEnum):
+        WRITE = 0
+        WAIT = 1
+
     def __init__(self):
         self.r = redis.Redis(
             host=SETTINGS.REDIS_HOST,
@@ -134,22 +133,22 @@ class Queue:
         self.r.delete(SETTINGS.QUEUE_NAME)
 
     def start(self):
-        self.status = Status.WRITE
+        self.status = Queue.Status.WRITE
 
     def stop(self):
-        self.status = Status.WAIT
+        self.status = Queue.Status.WAIT
 
     @property
     def is_active(self) -> bool:
-        return self.status == Status.WRITE
+        return self.status == Queue.Status.WRITE
 
     @property
     def status(self) -> Status:
-        status_value = self.r.get(SETTINGS.STATUS_NAME)
+        status_value = int(self.r.get(SETTINGS.STATUS_NAME))  # type: ignore
         if status_value is None:
-            self.r.set(SETTINGS.STATUS_NAME, Status.WRITE.value)
-            return Status.WRITE
-        return Status(status_value)
+            self.r.set(SETTINGS.STATUS_NAME, Queue.Status.WRITE.value)
+            return Queue.Status.WRITE
+        return Queue.Status(status_value)
 
     @status.setter
     def status(self, value: Status):
@@ -163,9 +162,6 @@ class Queue:
 
     @property
     def speed(self) -> int:
-        # begin = self.size
-        # time.sleep(1)
-        # return  self.size - begin
         range = self.range(0, 10000)
         if not range:
             return 0

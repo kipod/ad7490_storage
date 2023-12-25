@@ -18,7 +18,7 @@ class ADC():
 
     def __decodeReadResult(self, val):
         if len(val) != 2:
-            return -1, none
+            return -1, None
         return val[0] >> 4, ((val[0] & 0b1111) << 8) | val[1]
 
     def __encodeControlBytes(self, channel):
@@ -60,7 +60,7 @@ class ADC():
         self.spi.writebytes(self.__encodeControlBytes(0))
         if self.power_mode == 3:
             # wake up from sleep or something
-            time.sleep(MICROSECOND)            
+            time.sleep(MICROSECOND)
             self.dummyReads(2)
 
     def setDOUT(self, val):

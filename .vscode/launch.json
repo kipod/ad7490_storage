@@ -29,10 +29,13 @@
       "justMyCode": true
     },
     {
-      "name": "IPython",
+      "name": "shell",
       "type": "python",
       "request": "launch",
-      "module": "IPython",
+      "module": "invoke",
+      "args": [
+        "shell"
+      ],
       "console": "integratedTerminal",
       "justMyCode": true
     }
