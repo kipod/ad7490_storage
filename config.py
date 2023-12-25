@@ -7,7 +7,8 @@ class Settings(BaseSettings):
     QUEUE_NAME: str = "queue"
     STATUS_NAME: str = "status"
     MAX_QUEUE_SIZE: int = 10_000
-    PIPE_SIZE: int = 10
+    WRITE_BATCH_SIZE: int = 10000
+    PIPE_SIZE: int = 100
 
     REDIS_HOST: str = "localhost"
     REDIS_PORT: int = 6379

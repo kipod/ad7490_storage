@@ -5,15 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    },
-    {
-      "name": "Python: Writer",
+      "name": "Writer",
       "type": "python",
       "request": "launch",
       "program": "writer.py",
@@ -21,7 +13,7 @@
       "justMyCode": true
     },
     {
-      "name": "Python: Reader",
+      "name": "Reader",
       "type": "python",
       "request": "launch",
       "program": "reader.py",
