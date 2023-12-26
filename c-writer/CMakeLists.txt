@@ -23,6 +23,8 @@ set(SOURCES
     config.hpp
     test_q.cpp
     test_q.hpp
+    ad7490.cpp
+    ad7490.hpp
     )
 
 add_executable(writer ${SOURCES})

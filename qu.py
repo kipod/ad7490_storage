@@ -162,7 +162,7 @@ class Queue:
 
     @property
     def speed(self) -> int:
-        range = self.range(0, 10000)
+        range = self.range(0, 1000)
         if not range:
             return 0
         seconds = (range[0].ts - range[-1].ts) / 1e6

@@ -1,9 +1,11 @@
 {
   "cSpell.words": [
+    "dout",
     "llen",
     "lpush",
     "lrange",
     "maxmemory",
+    "pabort",
     "pydantic",
     "qdata",
     "rpush",
