@@ -161,12 +161,13 @@ class Queue:
         return f"Queue({self.size})"
 
     @property
-    def speed(self) -> int:
+    def speed(self) -> tuple[int, int]:
         range = self.range(0, 1000)
         if not range:
             return 0
         seconds = (range[0].ts - range[-1].ts) / 1e6
-        return int(len(range) / seconds)
+        count = len(range)
+        return int(count / seconds), count
 
     @property
     def time(self) -> float:

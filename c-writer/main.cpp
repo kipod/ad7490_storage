@@ -27,7 +27,7 @@ int main(int, char **)
 {
     // test_queue();
 
-    AD7490 ad7490("/dev/spidev4.1", 10000000);
+    AD7490 ad7490("/dev/spidev4.1", 20000000);
 
     struct sigaction sigIntHandler;
 
@@ -72,7 +72,7 @@ int main(int, char **)
 
                     counter++;
 
-                    // if (counter >= 20000)
+                    // if (counter >= 100)
                     // {
                     //     q.stop();
                     //     exit(1);

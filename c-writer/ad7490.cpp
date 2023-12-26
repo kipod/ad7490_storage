@@ -101,7 +101,7 @@ void AD7490::spi_transfer(const uint8_t *tx, const uint8_t *rx, uint32_t len)
     tr.tx_buf = (unsigned long)tx;
     tr.rx_buf = (unsigned long)rx;
     tr.len = len;
-    tr.speed_hz = m_spi_speed_hz;
+    // tr.speed_hz = m_spi_speed_hz;
     tr.delay_usecs = 0;
     tr.bits_per_word = m_bits;
 

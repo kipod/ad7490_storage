@@ -31,7 +31,7 @@ class ADC():
         for i in range(cnt):
             self.readChannel(i & 0b1111)
 
-    def readAllChannels(self):
+    def readAllChannels(self) -> list[int]:
         actual_power_mode = self.power_mode
         self.setPowerMode(3)
         try:
@@ -40,7 +40,7 @@ class ADC():
             self.setPowerMode(actual_power_mode)
         return res
 
-    def readChannel(self, channel):
+    def readChannel(self, channel) -> int:
         actual_power_mode = self.power_mode
         self.setPowerMode(3)
         try:

@@ -1,5 +1,5 @@
-import random
 import time
+from ADC import ADC
 
 from qu import Queue, QData
 from logger import log
@@ -8,7 +8,7 @@ from config import Settings, get_settings
 SETTINGS: Settings = get_settings()
 
 queue = Queue()
-
+adc = ADC(4,1,SETTINGS.SPI_SPEED)
 
 def main():
     run = False
@@ -19,24 +19,25 @@ def main():
                 log(log.INFO, "GO!!!")
             run = True
             for _ in range(SETTINGS.WRITE_BATCH_SIZE):
+                values = adc.readAllChannels()
                 qdata = QData(
-                    value1=(counter & 0xFFFF),
-                    value2=random.randint(0, 4095),
-                    value3=random.randint(0, 4095),
-                    value4=random.randint(0, 4095),
-                    value5=random.randint(0, 4095),
-                    value6=random.randint(0, 4095),
-                    value7=random.randint(0, 4095),
-                    value8=random.randint(0, 4095),
-                    value9=random.randint(0, 4095),
-                    value10=random.randint(0, 4095),
-                    value11=random.randint(0, 4095),
-                    value12=random.randint(0, 4095),
-                    value13=random.randint(0, 4095),
-                    value14=random.randint(0, 4095),
-                    value15=random.randint(0, 4095),
-                    value16=random.randint(0, 4095),
-                )
+                    value1=values[0],
+                    value2=values[1],
+                    value3=values[2],
+                    value4=values[3],
+                    value5=values[4],
+                    value6=values[5],
+                    value7=values[6],
+                    value8=values[7],
+                    value9=values[8],
+                    value10=values[9],
+                    value11=values[10],
+                    value12=values[11],
+                    value13=values[12],
+                    value14=values[13],
+                    value15=values[14],
+                    value16=values[15],
+               )
                 queue.push(qdata)
                 counter += 1
         else:
