@@ -6,6 +6,7 @@
 #include "test_q.hpp"
 #include "config.hpp"
 #include "ad7490.hpp"
+#include <pthread.h>
 
 const Config SETTINGS;
 
@@ -22,9 +23,25 @@ void sig_handler(int s)
     exit(1);
 }
 
+void up_priority()
+{
+    pthread_t thId = pthread_self();
+    pthread_attr_t thAttr;
+    int policy = 0;
+    int max_prio_for_policy = 0;
+
+    pthread_attr_init(&thAttr);
+    pthread_attr_getschedpolicy(&thAttr, &policy);
+    max_prio_for_policy = sched_get_priority_max(policy);
+
+    pthread_setschedprio(thId, max_prio_for_policy);
+    pthread_attr_destroy(&thAttr);
+}
+
 int main(int, char **)
 {
     // test_queue();
+    up_priority();
 
     AD7490 ad7490("/dev/spidev4.1", SETTINGS.SPI_SPEED);
     // std::list<QData> data_range;
@@ -67,7 +84,7 @@ int main(int, char **)
                     //     // q.stop();
                     //     // auto range = q.range(0, -1);
                     //     auto range = data_range;
-                    //     counter = 0;
+                    //     // counter = 0;
                     //     // for (std::list<QData>::const_iterator it = range.begin(); it != range.end(); ++it)
                     //     // {
                     //     //     const QData &data = *it;

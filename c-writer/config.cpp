@@ -33,5 +33,5 @@ Config::Config()
     REDIS_PORT = get_int_env("REDIS_PORT", 6379);
     REDIS_DB = get_int_env("REDIS_DB", 0);
 
-    SPI_SPEED = get_int_env("SPI_SPEED", 10 * 1000 * 1000);
+    SPI_SPEED = get_int_env("SPI_SPEED", 16 * 1000 * 1000);
 }
