@@ -3,6 +3,8 @@
 
 const Config SETTINGS;
 
+size_t counter = 0;
+
 std::string get_redis_url()
 {
     return "tcp://" + SETTINGS.REDIS_HOST + ":" + std::to_string(SETTINGS.REDIS_PORT);

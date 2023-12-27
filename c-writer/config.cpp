@@ -28,7 +28,10 @@ Config::Config()
     MAX_QUEUE_SIZE = get_int_env("MAX_QUEUE_SIZE", 500000);
     WRITE_BATCH_SIZE = get_int_env("WRITE_BATCH_SIZE", 10000);
     PIPE_SIZE = get_int_env("PIPE_SIZE", 100);
+
     REDIS_HOST = get_str_env("REDIS_HOST", "localhost");
     REDIS_PORT = get_int_env("REDIS_PORT", 6379);
     REDIS_DB = get_int_env("REDIS_DB", 0);
+
+    SPI_SPEED = get_int_env("SPI_SPEED", 10 * 1000 * 1000);
 }

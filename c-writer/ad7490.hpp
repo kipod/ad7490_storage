@@ -45,9 +45,13 @@ private:
     int m_dout;
     int m_rng;
     int m_coding;
+    uint8_t m_cw_buf[32] = {0}; // control word buffer. 16 channels * 2 bytes per channel
+    ChannelRX_t m_rx_data = {0};
+    uint16_t m_values[16] = {0};
 
     int spi_init(const char *spi_device);
-    void spi_transfer(const uint8_t *tx, const uint8_t *rx, uint32_t len = 2);
+    void spi_transfer(const uint8_t *tx, const uint8_t *rx, uint32_t len = 2, uint16_t delay = 0);
+    void init_cw_buf();
 
 public:
     AD7490(const char *spi_device = "/dev/spidev4.1", uint32_t spi_speed_hz = 1000000, int power_mode = 3, int dout = 0, int rng = 0, int coding = 1);

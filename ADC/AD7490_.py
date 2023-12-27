@@ -41,13 +41,8 @@ class ADC():
         return res
 
     def readChannel(self, channel) -> int:
-        actual_power_mode = self.power_mode
-        self.setPowerMode(3)
-        try:
-            self.spi.writebytes(self.__encodeControlBytes(channel))
-            chn, meas = self.__decodeReadResult(self.spi.readbytes(2))
-        finally:
-            self.setPowerMode(actual_power_mode)
+        self.spi.writebytes(self.__encodeControlBytes(channel))
+        chn, meas = self.__decodeReadResult(self.spi.readbytes(2))
         if chn != channel:
             raise Exception("Something strange happened, expected channel %d, got %d" % (channel, chn))
         return meas

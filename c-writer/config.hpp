@@ -23,4 +23,6 @@ struct Config
     std::string REDIS_HOST;
     int REDIS_PORT;
     int REDIS_DB;
+
+    int SPI_SPEED;
 };

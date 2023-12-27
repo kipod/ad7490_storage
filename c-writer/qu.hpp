@@ -12,6 +12,8 @@ const std::string STATUS_NAME = "status";
 const int MAX_QUEUE_SIZE = 10000;
 const int PIPE_SIZE = 10;
 
+extern size_t counter;
+
 class Queue
 {
 private:
