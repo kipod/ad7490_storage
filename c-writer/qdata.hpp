@@ -26,6 +26,8 @@ struct QData
     QData(const QData &) = default;
     // default move constructor
     QData(QData &&) = default;
+    // default copy assignment
+    QData &operator=(const QData &) = default;
     // compare  operators
     bool operator==(const QData &rhs) const;
     // operator casting in bool

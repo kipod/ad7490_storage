@@ -12,6 +12,11 @@ const Config SETTINGS;
 
 using namespace sw::redis;
 
+std::deque<double> speed_tests;
+std::deque<QData> spiReadQueue;
+QData first;
+const size_t TEST_RANGE_SIZE = 10000;
+
 Queue q;
 
 void sig_handler(int s)
@@ -20,6 +25,32 @@ void sig_handler(int s)
     q.stop();
     std::cout << "Stop queue" << std::endl;
     std::cout << "Wrote " << counter << " records" << std::endl;
+
+    if (!speed_tests.empty())
+    {
+        std::cout << "Speed test: " << std::endl;
+        double sum = 0;
+        double min = 1000000;
+        double max = 0;
+        for (std::deque<double>::const_iterator it = speed_tests.begin(); it != speed_tests.end(); ++it)
+        {
+            double speed = *it;
+            sum += speed;
+            if (speed < min)
+            {
+                min = speed;
+            }
+            if (speed > max)
+            {
+                max = speed;
+            }
+        }
+        double avg = sum / speed_tests.size();
+        std::cout << "Min: " << min << std::endl;
+        std::cout << "Max: " << max << std::endl;
+        std::cout << "Avg: " << avg << std::endl;
+        std::cout << "Cache size: " << spiReadQueue.size() << std::endl;
+    }
     exit(1);
 }
 
@@ -38,22 +69,11 @@ void up_priority()
     pthread_attr_destroy(&thAttr);
 }
 
-int main(int, char **)
+void read_spi()
 {
-    // test_queue();
     up_priority();
 
     AD7490 ad7490("/dev/spidev4.1", SETTINGS.SPI_SPEED);
-    // std::list<QData> data_range;
-
-    struct sigaction sigIntHandler;
-
-    sigIntHandler.sa_handler = sig_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-
-    sigaction(SIGINT, &sigIntHandler, nullptr);
-    sigaction(SIGABRT, &sigIntHandler, nullptr);
 
     std::cout << "start c-writer" << std::endl;
     bool run = false;
@@ -70,51 +90,51 @@ int main(int, char **)
                 }
                 for (int i = 0; i < SETTINGS.WRITE_BATCH_SIZE; i++)
                 {
+                    // QData data(counter);
+                    QData data = ad7490.read();
+                    // q.push(data);
+                    spiReadQueue.push_back(data);
                     counter++;
 
-                    // QData data(counter);
+                    if (counter % TEST_RANGE_SIZE == 1)
+                    {
+                        first = data;
+                    }
 
-                    QData data = ad7490.read();
+                    if (counter % TEST_RANGE_SIZE == 0)
+                    {
+                        //     // q.stop();
+                        //     // auto range = q.range(0, -1);
+                        //     // counter = 0;
+                        //     // for (std::list<QData>::const_iterator it = range.begin(); it != range.end(); ++it)
+                        //     // {
+                        //     //     const QData &data = *it;
+                        //     //     if (counter == 0)
+                        //     //     {
+                        //     //         printf("----------------------------------------------------------------------------------------\n");
+                        //     //         printf("|  No  | 00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 | 13 | 14 | 15 |\n");
+                        //     //         printf("----------------------------------------------------------------------------------------\n");
+                        //     //     }
+                        //     //     printf("|%06d|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|\n",
+                        //     //            counter,
+                        //     //            data.value1, data.value2, data.value3, data.value4,
+                        //     //            data.value5, data.value6, data.value7, data.value8,
+                        //     //            data.value9, data.value10, data.value11, data.value12,
+                        //     //            data.value13, data.value14, data.value15, data.value16);
+                        //     //     printf("----------------------------------------------------------------------------------------\n");
+                        //     //     counter++;
+                        //     // }
 
-                    q.push(data);
-                    // data_range.push_front(data);
+                        // get first and last element
+                        {
+                            QData &last = data;
+                            double speed = (double)(TEST_RANGE_SIZE) / ((last.ts - first.ts) / 1e6);
+                            speed_tests.push_back(speed);
+                            std::cout << "Speed: " << speed << " records/sec (" << TEST_RANGE_SIZE << ")" << std::endl;
+                        }
 
-                    // if (counter >= 10000)
-                    // {
-                    //     // q.stop();
-                    //     // auto range = q.range(0, -1);
-                    //     auto range = data_range;
-                    //     // counter = 0;
-                    //     // for (std::list<QData>::const_iterator it = range.begin(); it != range.end(); ++it)
-                    //     // {
-                    //     //     const QData &data = *it;
-                    //     //     if (counter == 0)
-                    //     //     {
-                    //     //         printf("----------------------------------------------------------------------------------------\n");
-                    //     //         printf("|  No  | 00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 | 13 | 14 | 15 |\n");
-                    //     //         printf("----------------------------------------------------------------------------------------\n");
-                    //     //     }
-                    //     //     printf("|%06d|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|%04X|\n",
-                    //     //            counter,
-                    //     //            data.value1, data.value2, data.value3, data.value4,
-                    //     //            data.value5, data.value6, data.value7, data.value8,
-                    //     //            data.value9, data.value10, data.value11, data.value12,
-                    //     //            data.value13, data.value14, data.value15, data.value16);
-                    //     //     printf("----------------------------------------------------------------------------------------\n");
-                    //     //     counter++;
-                    //     // }
-
-                    //     // get first and last element
-                    //     if (range.size() > 1)
-                    //     {
-                    //         auto first = range.front();
-                    //         auto last = range.back();
-                    //         double speed = (double)(range.size()) / ((first.ts - last.ts) / 1e6);
-                    //         std::cout << "Speed: " << speed << " records/sec (" << range.size() << ")" << std::endl;
-                    //     }
-
-                    //     exit(1);
-                    // }
+                        // exit(1);
+                    }
                 }
             }
             else
@@ -138,5 +158,44 @@ int main(int, char **)
         std::cerr << "Unknown exception" << std::endl;
     }
     q.stop();
+}
+
+void write_to_redis()
+{
+    for (;;)
+    {
+        if (!spiReadQueue.empty())
+        {
+            QData data = spiReadQueue.front();
+            spiReadQueue.pop_front();
+            q.push(data);
+        }
+        else
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    }
+}
+
+int main(int, char **)
+{
+    // test_queue();
+
+    struct sigaction sigIntHandler;
+
+    sigIntHandler.sa_handler = sig_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+
+    sigaction(SIGINT, &sigIntHandler, nullptr);
+    sigaction(SIGABRT, &sigIntHandler, nullptr);
+
+    //  read_spi();
+    std::thread reader(read_spi);
+    std::thread writer(write_to_redis);
+
+    reader.join();
+    writer.join();
+
     return 0;
 }
