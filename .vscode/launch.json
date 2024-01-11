@@ -21,13 +21,19 @@
       "justMyCode": true
     },
     {
+      "name": "TCP server",
+      "type": "python",
+      "request": "launch",
+      "program": "tcp_server.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
       "name": "shell",
       "type": "python",
       "request": "launch",
       "module": "invoke",
-      "args": [
-        "shell"
-      ],
+      "args": ["shell"],
       "console": "integratedTerminal",
       "justMyCode": true
     }
