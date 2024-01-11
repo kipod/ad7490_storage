@@ -164,7 +164,7 @@ class Queue:
     def speed(self) -> tuple[int, int]:
         range = self.range(0, 1000)
         if not range:
-            return 0
+            return 0, 0
         seconds = (range[0].ts - range[-1].ts) / 1e6
         count = len(range)
         return int(count / seconds), count
