@@ -95,7 +95,7 @@ class Queue:
         except redis.exceptions.ResponseError:
             return 0
 
-    def _rpop(self, name: str, count: int=1) -> list[bytes]:
+    def _rpop(self, name: str, count: int = 1) -> list[bytes]:
         try:
             return self.r.rpop(name, count)  # type: ignore
         except redis.exceptions.ResponseError:
@@ -109,7 +109,7 @@ class Queue:
 
     def push(self, data: QData):
         self.pipe.lpush(SETTINGS.QUEUE_NAME, data.pack())
-        self.pipe_size+=1
+        self.pipe_size += 1
         if self.pipe_size >= SETTINGS.PIPE_SIZE:
             self.pipe.execute()
             self.pipe_size = 0
@@ -171,7 +171,7 @@ class Queue:
 
     @property
     def time(self) -> float:
-        """ return time of queue in seconds"""
+        """return time of queue in seconds"""
         size = min(self.size, SETTINGS.MAX_QUEUE_SIZE)
         if size == 0:
             return 0
@@ -181,4 +181,4 @@ class Queue:
             older_point = self.range(size, size)
         older = older_point[0].ts
         newer = self.range(0, 0)[0].ts
-        return (newer-older) / 1e6
+        return (newer - older) / 1e6

@@ -16,6 +16,8 @@ class Settings(BaseSettings):
 
     SPI_SPEED: int = 10_000_000
 
+    TCP_SERVER_PORT: int = 2345
+
     model_config = SettingsConfigDict(
         extra="allow",
         env_file=("project.env", ".env"),

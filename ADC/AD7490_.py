@@ -1,9 +1,10 @@
 import time
 import spidev
 
-MICROSECOND = 1/1000000.0
+MICROSECOND = 1 / 1000000.0
 
-class ADC():
+
+class ADC:
     def __init__(self, spi_bus, spi_device, spi_speed_hz=1000000, power_mode=3, dout=0, rng=0, coding=1):
         self.spi = spidev.SpiDev()
         # Connects to the specified SPI device, opening /dev/spidev<bus>.<device>
@@ -11,10 +12,10 @@ class ADC():
         self.spi.max_speed_hz = spi_speed_hz
 
         self.power_mode = -1
-        self.dout = dout & 0b1       # set DOUT to three state at end of transfer
-        self.rng = rng & 0b1         # set range to double Vref
-        self.coding = coding & 0b1   # set coding to straight binary
-        self.setPowerMode(power_mode & 0b11) # set power mode to normal
+        self.dout = dout & 0b1  # set DOUT to three state at end of transfer
+        self.rng = rng & 0b1  # set range to double Vref
+        self.coding = coding & 0b1  # set coding to straight binary
+        self.setPowerMode(power_mode & 0b11)  # set power mode to normal
 
     def __decodeReadResult(self, val):
         if len(val) != 2:
@@ -22,8 +23,8 @@ class ADC():
         return val[0] >> 4, ((val[0] & 0b1111) << 8) | val[1]
 
     def __encodeControlBytes(self, channel):
-        byte1 = 0b10000000 # write = 1
-        byte1 |=  ((channel & 0b1111) << 2) | (self.power_mode)
+        byte1 = 0b10000000  # write = 1
+        byte1 |= ((channel & 0b1111) << 2) | (self.power_mode)
         byte2 = (self.dout << 6) | (self.rng << 5) | (self.coding << 4)
         return byte1, byte2
 

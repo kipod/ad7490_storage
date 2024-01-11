@@ -8,7 +8,8 @@ from config import Settings, get_settings
 SETTINGS: Settings = get_settings()
 
 queue = Queue()
-adc = ADC(4,1,SETTINGS.SPI_SPEED)
+adc = ADC(4, 1, SETTINGS.SPI_SPEED)
+
 
 def main():
     run = False
@@ -37,7 +38,7 @@ def main():
                     value14=values[13],
                     value15=values[14],
                     value16=values[15],
-               )
+                )
                 queue.push(qdata)
                 counter += 1
         else:
@@ -46,8 +47,6 @@ def main():
             run = False
             print(".", end="")
             time.sleep(1)
-
-
 
 
 if __name__ == "__main__":
