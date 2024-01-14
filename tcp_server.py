@@ -16,16 +16,16 @@ queue = Queue()
 async def handle_client(reader: StreamReader, writer: StreamWriter):
     log(log.INFO, "TCP Client connected")
 
-    DELTA_TIME = 2  # seconds
+    DELTA_TIME = 5  # seconds
     prev_counter = 0
     start_counter = 0
     start = datetime.now()
     while True:
-        data_byte = await reader.read(BUFF_SIZE)
+        data_byte: bytes = await reader.read(BUFF_SIZE)
         if not data_byte:
             break
         assert len(data_byte) == BUFF_SIZE
-        counter, *values = struct.unpack("I16H", data_byte[:4])
+        counter, *values = struct.unpack("I16H", data_byte)
         if prev_counter:
             assert counter - prev_counter == 1
         prev_counter = counter
@@ -37,6 +37,7 @@ async def handle_client(reader: StreamReader, writer: StreamWriter):
             start_counter = counter
 
         # write data to redis
+        # log(log.INFO, "counter: %d", counter)
         qdata = QData(
             value1=values[0],
             value2=values[1],
@@ -55,6 +56,8 @@ async def handle_client(reader: StreamReader, writer: StreamWriter):
             value15=values[14],
             value16=values[15],
         )
+        # log(log.INFO, "data: %s", qdata)
+
         queue.push(qdata)
 
     log(log.INFO, "TCP Client disconnected")

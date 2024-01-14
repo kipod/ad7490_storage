@@ -69,6 +69,28 @@ class QData(BaseModel):
             **{f"value{n[0]+1}": n[1] for n in enumerate(values)},
         )
 
+    def __str__(self) -> str:
+        # print each value hexadecimally
+        return (
+            f"{self.ts}: "
+            f"{self.value1:04X}|"
+            f"{self.value2:04X}|"
+            f"{self.value3:04X}|"
+            f"{self.value4:04X}|"
+            f"{self.value5:04X}|"
+            f"{self.value6:04X}|"
+            f"{self.value7:04X}|"
+            f"{self.value8:04X}|"
+            f"{self.value9:04X}|"
+            f"{self.value10:04X}|"
+            f"{self.value11:04X}|"
+            f"{self.value12:04X}|"
+            f"{self.value13:04X}|"
+            f"{self.value14:04X}|"
+            f"{self.value15:04X}|"
+            f"{self.value16:04X}"
+        )
+
 
 class Queue:
     class Status(enum.IntEnum):
