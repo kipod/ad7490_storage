@@ -1,4 +1,4 @@
-from qu import Queue
+from storage.qu import Queue
 
 
 q = Queue()

@@ -8,7 +8,7 @@
       "name": "Writer",
       "type": "python",
       "request": "launch",
-      "program": "writer.py",
+      "program": "storage/writer.py",
       "console": "integratedTerminal",
       "justMyCode": true
     },
@@ -16,7 +16,7 @@
       "name": "Reader",
       "type": "python",
       "request": "launch",
-      "program": "reader.py",
+      "program": "storage/reader.py",
       "console": "integratedTerminal",
       "justMyCode": true
     },
@@ -24,7 +24,7 @@
       "name": "TCP server",
       "type": "python",
       "request": "launch",
-      "program": "tcp_server.py",
+      "program": "storage/tcp_server.py",
       "console": "integratedTerminal",
       "justMyCode": true
     },

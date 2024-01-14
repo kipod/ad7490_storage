@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "storage"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Simple2B <simple2b.info@gmail.com>"]
 readme = "README.md"
@@ -12,7 +12,6 @@ numpy = "^1.26.2"
 pydantic-settings = "^2.1.0"
 invoke = "^2.2.0"
 redis = {extras = ["hiredis"], version = "^5.0.1"}
-spidev = "^3.6"
 pyserial = "^3.5"
 
 

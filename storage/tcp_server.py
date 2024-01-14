@@ -3,9 +3,9 @@ import asyncio
 from asyncio import StreamReader, StreamWriter
 from datetime import datetime
 
-from qu import Queue, QData
-from config import Settings, get_settings
-from logger import log
+from storage.qu import Queue, QData
+from storage.config import Settings, get_settings
+from storage.logger import log
 
 SETTINGS: Settings = get_settings()
 BUFF_SIZE = 36

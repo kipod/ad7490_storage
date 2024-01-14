@@ -6,7 +6,7 @@ from typing import Self
 import redis
 from pydantic import BaseModel, Field
 
-from config import Settings, get_settings
+from storage.config import Settings, get_settings
 
 SETTINGS: Settings = get_settings()
 

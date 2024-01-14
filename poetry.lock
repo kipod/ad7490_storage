@@ -694,17 +694,6 @@ files = [
 ]
 
 [[package]]
-name = "spidev"
-version = "3.6"
-description = "Python bindings for Linux SPI access through spidev"
-optional = false
-python-versions = "*"
-files = [
-    {file = "spidev-3.6-cp39-cp39-linux_armv7l.whl", hash = "sha256:280abc00a1ef7780ef62c3f294f52a2527b6c47d8c269fea98664970bcaf6da5"},
-    {file = "spidev-3.6.tar.gz", hash = "sha256:14dbc37594a4aaef85403ab617985d3c3ef464d62bc9b769ef552db53701115b"},
-]
-
-[[package]]
 name = "stack-data"
 version = "0.6.3"
 description = "Extract data from python stack frames and tracebacks for informative displays"
@@ -763,4 +752,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f6488b491b8c2c54859f10f3db6912633d86e33c49e477bf66f543c7a244f33a"
+content-hash = "8a516668812a6c2b1b52ae8271b1e0d600619f780d835c0a1192b097588b90ea"

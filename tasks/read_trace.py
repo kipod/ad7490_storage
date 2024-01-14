@@ -1,6 +1,6 @@
 import serial
 from invoke import task
-from config import get_settings
+from storage.config import get_settings
 
 SETTINGS = get_settings()
 
