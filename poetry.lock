@@ -610,6 +610,20 @@ plugins = ["importlib-metadata"]
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pyserial"
+version = "3.5"
+description = "Python Serial Port Extension"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pyserial-3.5-py2.py3-none-any.whl", hash = "sha256:c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0"},
+    {file = "pyserial-3.5.tar.gz", hash = "sha256:3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb"},
+]
+
+[package.extras]
+cp2110 = ["hidapi"]
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -749,4 +763,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "645ea7ee0a04bc623414da138f4d15bf8a3577a64a753d24820c9dca1f297058"
+content-hash = "f6488b491b8c2c54859f10f3db6912633d86e33c49e477bf66f543c7a244f33a"

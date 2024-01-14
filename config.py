@@ -18,6 +18,10 @@ class Settings(BaseSettings):
 
     TCP_SERVER_PORT: int = 2345
 
+    # Serial
+    TRACE_SERIAL_PORT: str = "/dev/ttyS0"
+    TRACE_SERIAL_BAUDRATE: int = 115200
+
     model_config = SettingsConfigDict(
         extra="allow",
         env_file=("project.env", ".env"),

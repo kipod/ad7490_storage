@@ -13,6 +13,7 @@ pydantic-settings = "^2.1.0"
 invoke = "^2.2.0"
 redis = {extras = ["hiredis"], version = "^5.0.1"}
 spidev = "^3.6"
+pyserial = "^3.5"
 
 
 [tool.poetry.group.dev.dependencies]

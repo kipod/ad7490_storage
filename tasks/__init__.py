@@ -7,3 +7,4 @@ sys.path.append(ROOT_PATH)
 
 
 from .shell import shell
+from .read_trace import read_trace
