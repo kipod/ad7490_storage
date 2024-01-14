@@ -4,6 +4,8 @@ from config import get_settings
 
 SETTINGS = get_settings()
 
+BREAK_LINES = ("waiting for download",)
+
 
 @task
 def read_trace(ctx):
@@ -18,7 +20,11 @@ def read_trace(ctx):
         while True:
             line = ser.readline().decode("utf-8")
             if line:
+                line = line.strip()
                 print(line)
+                if any([break_line in line for break_line in BREAK_LINES]):
+                    print("Got break line! Bye...")
+                    break
 
     except KeyboardInterrupt:
         print("Bye...")
