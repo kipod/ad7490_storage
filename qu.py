@@ -1,6 +1,7 @@
 import enum
 import struct
 import time
+from datetime import datetime
 from typing import Self
 
 import redis
@@ -72,7 +73,7 @@ class QData(BaseModel):
     def __str__(self) -> str:
         # print each value hexadecimally
         return (
-            f"{self.ts}: "
+            f"{self.datetime}: "
             f"{self.value1:04X}|"
             f"{self.value2:04X}|"
             f"{self.value3:04X}|"
@@ -90,6 +91,13 @@ class QData(BaseModel):
             f"{self.value15:04X}|"
             f"{self.value16:04X}"
         )
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    @property
+    def datetime(self) -> datetime:
+        return datetime.fromtimestamp(self.ts / 1e6)
 
 
 class Queue:
@@ -204,3 +212,7 @@ class Queue:
         older = older_point[0].ts
         newer = self.range(0, 0)[0].ts
         return (newer - older) / 1e6
+
+    # get value by index
+    def __getitem__(self, index: int) -> QData:
+        return QData.unpack(self.r.lindex(SETTINGS.QUEUE_NAME, index))
