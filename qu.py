@@ -148,6 +148,8 @@ class Queue:
                 self.r.rpop(SETTINGS.QUEUE_NAME, over)
 
     def pop(self, count: int = 1) -> list[QData]:
+        if count == 0 or self.size == 0:
+            return []
         count = min(count, self.size)
         data = self._rpop(SETTINGS.QUEUE_NAME, count)
 
