@@ -21,7 +21,11 @@ async def handle_client(reader: StreamReader, writer: StreamWriter):
     start_counter = 0
     start = datetime.now()
     while True:
-        data_byte: bytes = await reader.read(BUFF_SIZE)
+        try:
+            data_byte: bytes = await asyncio.wait_for(reader.read(BUFF_SIZE), 5)
+        except asyncio.TimeoutError:
+            log(log.ERROR, "timeout error")
+            break
         if not data_byte:
             break
         assert len(data_byte) == BUFF_SIZE

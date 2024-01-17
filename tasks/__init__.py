@@ -8,3 +8,5 @@ sys.path.append(ROOT_PATH)
 
 from .shell import shell
 from .read_trace import read_trace
+from .tcp_writer import tcp_writer
+from .uart_writer import uart_writer

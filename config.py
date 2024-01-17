@@ -20,7 +20,10 @@ class Settings(BaseSettings):
 
     # Serial
     TRACE_SERIAL_PORT: str = "/dev/ttyS0"
-    TRACE_SERIAL_BAUDRATE: int = 115200
+    # TRACE_SERIAL_BAUDRATE: int = 115200
+    TRACE_SERIAL_BAUDRATE: int = 1500000
+    TRANSMIT_SERIAL_PORT: str = "/dev/ttyS9"
+    TRANSMIT_SERIAL_BAUDRATE: int = 9600
 
     model_config = SettingsConfigDict(
         extra="allow",
