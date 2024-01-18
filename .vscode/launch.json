@@ -36,6 +36,15 @@
       "args": ["shell"],
       "console": "integratedTerminal",
       "justMyCode": true
+    },
+    {
+      "name": "uart-writer",
+      "type": "python",
+      "request": "launch",
+      "module": "invoke",
+      "args": ["uart-writer"],
+      "console": "integratedTerminal",
+      "justMyCode": true
     }
   ]
 }

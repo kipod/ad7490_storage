@@ -63,6 +63,7 @@
         "codecvt": "cpp"
     },
     "cSpell.words": [
+        "hiredis",
         "llen",
         "lpush",
         "rpop"
