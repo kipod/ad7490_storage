@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sw/redis++/redis++.h>
 #include <thread>
+#include <mutex>
 #include <signal.h>
 
 #include "qu.hpp"
@@ -17,6 +18,7 @@ using namespace sw::redis;
 
 std::deque<double> speed_tests;
 std::deque<QData> spiReadQueue;
+std::mutex quMutex;
 QData first;
 const size_t TEST_RANGE_SIZE = 10000;
 
@@ -99,7 +101,10 @@ void read_mic_data()
                     for (auto it = dataSet.begin(); it != dataSet.end(); ++it)
                     {
                         const QData &data = *it;
-                        spiReadQueue.push_back(data);
+                        {
+                            std::lock_guard<std::mutex> lock(quMutex);
+                            spiReadQueue.push_back(data);
+                        }
                         counter++;
 
                         if (counter % TEST_RANGE_SIZE == 1)
@@ -171,6 +176,7 @@ void write_to_redis()
     {
         if (!spiReadQueue.empty())
         {
+            std::lock_guard<std::mutex> lock(quMutex);
             QData data = spiReadQueue.front();
             spiReadQueue.pop_front();
             q.push(data);
