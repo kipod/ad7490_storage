@@ -25,4 +25,7 @@ struct Config
     int REDIS_DB;
 
     int SPI_SPEED;
+    std::string TRANSMIT_SERIAL_PORT;
+    uint32_t TRANSMIT_SERIAL_BAUDRATE;
+    size_t TRANSMIT_SEND_PACKETS;
 };

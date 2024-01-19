@@ -34,4 +34,7 @@ Config::Config()
     REDIS_DB = get_int_env("REDIS_DB", 0);
 
     SPI_SPEED = get_int_env("SPI_SPEED", 16 * 1000 * 1000);
+    TRANSMIT_SERIAL_PORT = get_str_env("TRANSMIT_SERIAL_PORT", "/dev/ttyS4");
+    TRANSMIT_SERIAL_BAUDRATE = get_int_env("SPI_SPEED", 1500000);
+    TRANSMIT_SEND_PACKETS = get_int_env("TRANSMIT_SEND_PACKETS", 8);
 }
