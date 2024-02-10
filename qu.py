@@ -11,6 +11,8 @@ from config import Settings, get_settings
 
 SETTINGS: Settings = get_settings()
 
+SPEED_TEST_RANGE = 1000
+
 
 def timestamp() -> int:
     """returns timestamp in microseconds
@@ -194,7 +196,7 @@ class Queue:
 
     @property
     def speed(self) -> tuple[int, int]:
-        range = self.range(0, 1000)
+        range = self.range(0, SPEED_TEST_RANGE)
         if not range:
             return 0, 0
         seconds = (range[0].ts - range[-1].ts) / 1e6

@@ -9,6 +9,7 @@
 #include "config.hpp"
 // #include "ad7490.hpp"
 #include "uart.hpp"
+#include "reset.hpp"
 
 #include <pthread.h>
 
@@ -76,7 +77,7 @@ void up_priority()
 
 void read_mic_data()
 {
-    // up_priority();
+    up_priority();
 
     Uart uart;
 
@@ -86,7 +87,7 @@ void read_mic_data()
     {
         for (;;)
         {
-            if (q.isActive())
+            // if (q.isActive())
             {
                 if (!run)
                 {
@@ -147,16 +148,16 @@ void read_mic_data()
                     }
                 }
             }
-            else
-            {
-                if (run)
-                {
-                    std::cout << "Stop!!! Wait for queue to be active" << std::endl;
-                    run = false;
-                }
-                // sleep 1 sec
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
+            // else
+            // {
+            //     if (run)
+            //     {
+            //         std::cout << "Stop!!! Wait for queue to be active" << std::endl;
+            //         run = false;
+            //     }
+            //     // sleep 1 sec
+            //     std::this_thread::sleep_for(std::chrono::seconds(1));
+            // }
         }
     }
     catch (const std::exception &e)
@@ -191,6 +192,12 @@ void write_to_redis()
 int main(int, char **)
 {
     // test_queue();
+
+    // Reset ESP
+    if (0 != reset_esp())
+    {
+        std::cerr << "Cannot reset ESP" << std::endl;
+    }
 
     struct sigaction sigIntHandler;
 

@@ -63,6 +63,7 @@
         "codecvt": "cpp"
     },
     "cSpell.words": [
+        "GPIO",
         "hiredis",
         "llen",
         "lpush",
